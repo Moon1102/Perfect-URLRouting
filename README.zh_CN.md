@@ -1,4 +1,4 @@
-# URL 路由
+# URL 路由[English](README.md)
 
 <p align="center">
     <a href="http://perfect.org/get-involved.html" target="_blank">
@@ -48,13 +48,13 @@
 在您的浏览器中访问[http://localhost:8181/](http://localhost:8181/),试验已经添加的路由.
 
 
-## 问题
+## 问题报告
 
-我们正在使用JIRA来收集所有错误和支持相关的问题，因此，GitHub的问题已被禁用。</br>
+目前我们已经把所有错误报告合并转移到了JIRA上，因此github原有的错误汇报功能不能用于本项目。
 
-如果您发现了错误，bug，或者任何建议，您可以移步[http://jira.perfect.org:8080/servicedesk/customer/portal/1](http://jira.perfect.org:8080/servicedesk/customer/portal/1) 并提交它。
+您的任何宝贵建意见或建议，或者发现我们的程序有问题，欢迎您在这里告诉我们。[http://jira.perfect.org:8080/servicedesk/customer/portal/1](http://jira.perfect.org:8080/servicedesk/customer/portal/1)。
 
-在[http://jira.perfect.org:8080/projects/ISS/issues](http://jira.perfect.org:8080/projects/ISS/issues) 可以找到一个全面的开放问题列表。
+目前问题清单请参考以下链接： [http://jira.perfect.org:8080/projects/ISS/issues](http://jira.perfect.org:8080/projects/ISS/issues)
 
 
 ## 启用URL路由
@@ -71,16 +71,16 @@ routes.add(method: .get, uri: "/user/{id}/baz", handler: echo2Handler)
 routes.add(method: .get, uri: "/user/{id}", handler: echo2Handler)
 routes.add(method: .post, uri: "/user/{id}/baz", handler: echo3Handler)
 
-// Test this one via command line with curl:
+// 通过这个命令测试curl:
 // curl --data "{\"id\":123}" http://0.0.0.0:8181/raw --header "Content-Type:application/json"
 routes.add(method: .post, uri: "/raw", handler: rawPOSTHandler)
 
-// Trailing wildcard matches any path
+// 结尾通配符能够匹配从通配符开始的所有以之前内容的URI
 routes.add(method: .get, uri: "**", handler: echo4Handler)
 
-// Routes with a base URI
+//程序接口URI的路由
 
-// Create routes for version 1 API
+// 为程序接口API版本v1创建路由表
 var api = Routes()
 api.add(method: .get, uri: "/call1", handler: { _, response in
 	response.setBody(string: "API CALL 1")
@@ -91,39 +91,39 @@ api.add(method: .get, uri: "/call2", handler: { _, response in
 	response.completed()
 })
 
-// API version 1
+// API版本v1
 var api1Routes = Routes(baseUri: "/v1")
-// API version 2
+// API版本v2
 var api2Routes = Routes(baseUri: "/v2")
 
-// Add the main API calls to version 1
+// 为API版本v1增加主调函数
 api1Routes.add(routes: api)
-// Add the main API calls to version 2
+// 为API版本v2增加主调函数
 api2Routes.add(routes: api)
-// Update the call2 API
+// 更新API版本v2主调函数
 api2Routes.add(method: .get, uri: "/call2", handler: { _, response in
 	response.setBody(string: "API v2 CALL 2")
 	response.completed()
 })
 
-// Add both versions to the main server routes
+// 将两个版本的内容都注册到服务器主路由表上
 routes.add(routes: api1Routes)
 routes.add(routes: api2Routes)
 
 // Check the console to see the logical structure of what was installed.
 print("\(routes.navigator.description)")
 
-// Create server object.
+// 创建服务器对象
 let server = HTTPServer()
 
-// Listen on port 8181.
+// 监听8181端口
 server.serverPort = 8181
 
-// Add our routes.
+// 注册路由
 server.addRoutes(routes)
 
 do {
-    // Launch the HTTP server
+    // 启动服务器
     try server.start()
 } catch PerfectError.networkError(let err, let msg) {
     print("Network error thrown: \(err) \(msg)")
@@ -140,8 +140,8 @@ func echoHandler(request: HTTPRequest, _ response: HTTPResponse) {
 }
 ```
 
-## 使用 Apache
-The following Apache conf snippet can be used to pipe requests for non-existent files through to Perfect when using the URL routing system。
+## 如果希望与Apache配合使用
+下面的Apache配置脚本能够将从Apache服务器接收到的客户请求以管道方式重新定向到Perfect 服务器，哪怕请求的地址指向的是原本在Apache服务器上并不存在的文件。
 
 ```apacheconf
 	RewriteEngine on
@@ -151,5 +151,5 @@ The following Apache conf snippet can be used to pipe requests for non-existent 
 ```
 
 
-## 更多信息
-欲了解更多关于Perfect项目的信息，请访问 [perfect.org](http://perfect.org).
+## 更多内容
+关于Perfect更多内容，请参考[perfect.org](http://perfect.org)官网。
